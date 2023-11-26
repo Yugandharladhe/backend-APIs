@@ -126,7 +126,34 @@ const deleteTask=async(req,res)=>{
     }
 }
 
+const getTaskAnalytics=async(req,res)=>{
+
+    const{startDate,endDate}=req.body
+
+    try{
+        const allAssignedTask=await Task.
+                count({
+                    isCompleted:true,
+                    $and:[{ createdAt: { $gte:new Date(new Date(startDate).setUTCHours(0, 0, 0, 0)) 
+                    } 
+                }, { createdAt: { $lte: new Date(endDate) } }]})
+        const allIAssigned=await Task.count({isCompleted:true});
+        if(allAssignedTask || allIAssigned)
+        {
+            res.status(201).json({message:"success",task:{assignedByYou:allIAssigned,assignedToYou:allAssignedTask}});
+        }
+        else
+        {
+            res.status(404).json({message:"Task not found"});
+        }    
+    }
+    catch(err)
+    {
+        // res.json({err:err.message})
+    }
+}
 
 
 
-module.exports={createTask,updateTask,getSingleTask,getAllTask,deleteTask}
+
+module.exports={createTask,updateTask,getSingleTask,getAllTask,deleteTask,getTaskAnalytics}
