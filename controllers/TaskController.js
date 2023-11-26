@@ -137,7 +137,13 @@ const getTaskAnalytics=async(req,res)=>{
                     $and:[{ createdAt: { $gte:new Date(new Date(startDate).setUTCHours(0, 0, 0, 0)) 
                     } 
                 }, { createdAt: { $lte: new Date(endDate) } }]})
-        const allIAssigned=await Task.count({isCompleted:true});
+
+        const allIAssigned=await Task.count({
+            isCompleted:true,
+            $and:[{ createdAt: { $gte:new Date(new Date(startDate).setUTCHours(0, 0, 0, 0)) 
+            } 
+        }, { createdAt: { $lte: new Date(endDate) } }]})
+        
         if(allAssignedTask || allIAssigned)
         {
             res.status(201).json({message:"success",task:{assignedByYou:allIAssigned,assignedToYou:allAssignedTask}});
