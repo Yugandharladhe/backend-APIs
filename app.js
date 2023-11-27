@@ -4,7 +4,7 @@ require("dotenv").config()
 const app=express()
 const {connectDB}=require("./db/connect")
 
-const PORT=process.env.PORT
+const PORT=process.env.PORT || 5000
 connectDB(process.env.DB_URL);
 
 app.use(express.json())
